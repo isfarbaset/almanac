@@ -1,5 +1,10 @@
-import { useRef, useState } from 'react'
-import { clearAll, exportJSON, importJSON, setSetting } from '../db'
+import { useEffect, useRef, useState } from 'react'
+import { clearAll, exportJSON, getSetting, importJSON, setSetting } from '../db'
+import {
+  disableReminders,
+  enableReminders,
+  notificationsSupported,
+} from '../reminders'
 
 export default function Settings({ cycleOverride, onClose }) {
   const fileRef = useRef(null)
@@ -8,6 +13,34 @@ export default function Settings({ cycleOverride, onClose }) {
   const [override, setOverride] = useState(
     cycleOverride ? String(cycleOverride) : '',
   )
+  const [remindersOn, setRemindersOn] = useState(false)
+  const [reminderNote, setReminderNote] = useState(null)
+
+  useEffect(() => {
+    getSetting('remindersOn', false).then(setRemindersOn)
+  }, [])
+
+  async function toggleReminders() {
+    if (remindersOn) {
+      await disableReminders()
+      setRemindersOn(false)
+      setReminderNote(null)
+      return
+    }
+    const res = await enableReminders()
+    if (res === 'granted') {
+      setRemindersOn(true)
+      setReminderNote(null)
+    } else if (res === 'denied') {
+      setReminderNote(
+        'Notifications are blocked in your browser settings. Almanac will still show a reminder banner when you open it.',
+      )
+    } else if (res === 'unsupported') {
+      setReminderNote(
+        'This browser does not support notifications. Almanac will show a reminder banner when you open it instead.',
+      )
+    }
+  }
 
   async function doExport() {
     const data = await exportJSON()
@@ -60,6 +93,40 @@ export default function Settings({ cycleOverride, onClose }) {
           Your data lives only in this browser. Nothing is uploaded, there is
           no account, and there are no trackers. Export regularly so you keep
           your own backup.
+        </div>
+
+        <div className="mt-6">
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <div className="text-[11px] uppercase tracking-[0.14em] text-ink-soft">
+                Period reminders
+              </div>
+              <p className="mt-1 text-sm text-ink-soft">
+                A nudge when your period is due, late, or your fertile window
+                starts. Checked when you open the app, never on a server.
+              </p>
+            </div>
+            <button
+              onClick={toggleReminders}
+              role="switch"
+              aria-checked={remindersOn}
+              disabled={!notificationsSupported() && !remindersOn}
+              className={[
+                'relative h-7 w-12 shrink-0 rounded-full transition',
+                remindersOn ? 'bg-wine' : 'bg-line',
+              ].join(' ')}
+            >
+              <span
+                className={[
+                  'absolute top-0.5 h-6 w-6 rounded-full bg-cream shadow transition',
+                  remindersOn ? 'left-[1.375rem]' : 'left-0.5',
+                ].join(' ')}
+              />
+            </button>
+          </div>
+          {reminderNote && (
+            <p className="mt-2 text-sm text-wine">{reminderNote}</p>
+          )}
         </div>
 
         <div className="mt-6">

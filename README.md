@@ -2,6 +2,8 @@
 
 A private, local-only menstrual tracker and prediction web app.
 
+**Live:** https://isfarbaset.github.io/almanac/
+
 No accounts. No servers. No ads. No subscription. Your cycle data never
 leaves your device, which is the whole point: period data is sensitive,
 and the popular apps have a poor track record (Flo was fined by the FTC
@@ -38,13 +40,19 @@ npm run preview
 
 The build output is a fully static site in `dist/`.
 
-## Deploy (free)
+## Deploy
 
-It is a static site, so any of these free tiers work:
+Deployment is automated. Every push to `main` builds the site and
+publishes it to GitHub Pages via `.github/workflows/deploy.yml`. The live
+URL is https://isfarbaset.github.io/almanac/.
 
-- **Vercel**: import the repo, framework preset "Vite", deploy. ~3 minutes.
-- **Cloudflare Pages**: build command `npm run build`, output dir `dist`.
-- **GitHub Pages**: push `dist/` or wire a GitHub Actions workflow.
+Because it is served from a project subpath, `vite.config.js` sets
+`base` to `/almanac/`. If you fork it under a different repo name, change
+that value (and the PWA `scope`/`start_url`) to match.
+
+It is a plain static site, so it also works on any free static host
+(Vercel, Cloudflare Pages, Netlify) if you prefer: build command
+`npm run build`, output directory `dist`.
 
 ## Optional: nicer install icons
 

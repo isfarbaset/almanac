@@ -3,7 +3,13 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { VitePWA } from 'vite-plugin-pwa'
 
+// Served from https://isfarbaset.github.io/almanac/ so assets and the
+// service worker need the project-pages base path. For local dev Vite
+// still serves at "/", which is fine.
+const BASE = '/almanac/'
+
 export default defineConfig({
+  base: BASE,
   plugins: [
     react(),
     tailwindcss(),
@@ -17,7 +23,8 @@ export default defineConfig({
         theme_color: '#7c2d3a',
         background_color: '#fbf6ec',
         display: 'standalone',
-        start_url: '/',
+        scope: BASE,
+        start_url: BASE,
         icons: [
           {
             src: 'favicon.svg',
