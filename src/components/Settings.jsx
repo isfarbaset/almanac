@@ -83,7 +83,8 @@ export default function Settings({ cycleOverride, onClose }) {
       onClick={onClose}
     >
       <div
-        className="w-full max-w-xl rounded-t-3xl bg-cream px-6 pb-8 pt-6 shadow-2xl animate-sheet-in sm:rounded-3xl"
+        style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 2rem)' }}
+        className="w-full max-w-xl rounded-t-3xl bg-cream px-6 pt-6 shadow-2xl animate-sheet-in sm:rounded-3xl"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-line sm:hidden" />

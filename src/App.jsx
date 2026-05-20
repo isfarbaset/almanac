@@ -45,7 +45,7 @@ export default function App() {
   // null while Dexie is still resolving the first read.
   if (!ready) {
     return (
-      <div className="flex h-full items-center justify-center text-ink-soft">
+      <div className="flex min-h-dvh items-center justify-center text-ink-soft">
         <span className="font-display text-2xl">Almanac</span>
       </div>
     )
@@ -54,7 +54,7 @@ export default function App() {
   const hasData = days.length > 0
 
   return (
-    <div className="mx-auto flex min-h-full max-w-xl flex-col px-5 pb-24 pt-8 sm:px-6">
+    <div className="mx-auto flex min-h-dvh max-w-xl flex-col px-5 pb-32 pt-8 sm:px-6">
       <Header onSettings={() => setShowSettings(true)} />
 
       {banner && (
@@ -82,7 +82,8 @@ export default function App() {
 
       <button
         onClick={() => setOpenDay(todayKey())}
-        className="fixed bottom-6 left-1/2 -translate-x-1/2 rounded-full bg-wine px-7 py-3.5 font-display text-lg tracking-wide text-cream shadow-lg shadow-wine/25 transition active:scale-95"
+        style={{ bottom: 'calc(env(safe-area-inset-bottom, 0px) + 1.5rem)' }}
+        className="fixed left-1/2 -translate-x-1/2 rounded-full bg-wine px-7 py-3.5 font-display text-lg tracking-wide text-cream shadow-lg shadow-wine/25 transition active:scale-95"
       >
         Log today
       </button>
