@@ -54,7 +54,9 @@ export default function App() {
   const hasData = days.length > 0
 
   return (
-    <div className="mx-auto flex min-h-dvh max-w-xl flex-col px-5 pb-32 pt-8 sm:px-6">
+    <div
+      className={`mx-auto flex min-h-dvh max-w-xl flex-col px-5 pt-8 sm:px-6 ${hasData ? 'pb-32' : 'pb-12'}`}
+    >
       <Header onSettings={() => setShowSettings(true)} />
 
       {banner && (
@@ -80,13 +82,17 @@ export default function App() {
         </>
       )}
 
-      <button
-        onClick={() => setOpenDay(todayKey())}
-        style={{ bottom: 'calc(env(safe-area-inset-bottom, 0px) + 1.5rem)' }}
-        className="fixed left-1/2 -translate-x-1/2 rounded-full bg-wine px-7 py-3.5 font-display text-lg tracking-wide text-cream shadow-lg shadow-wine/25 transition active:scale-95"
-      >
-        Log today
-      </button>
+      {/* The empty state carries its own Log today button, so the floating
+          one only appears once there is a record to come back to. */}
+      {hasData && (
+        <button
+          onClick={() => setOpenDay(todayKey())}
+          style={{ bottom: 'calc(env(safe-area-inset-bottom, 0px) + 1.5rem)' }}
+          className="fixed left-1/2 -translate-x-1/2 rounded-full bg-wine px-7 py-3.5 font-display text-lg tracking-wide text-cream shadow-lg shadow-wine/25 transition active:scale-95"
+        >
+          Log today
+        </button>
+      )}
 
       {openDay && (
         <DaySheet
